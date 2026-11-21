@@ -6,7 +6,15 @@ SIM ?= icarus
 FST ?= -fst # Use more efficient FST format
 TOPLEVEL_LANG ?= verilog
 SRC_DIR = $(PWD)/../src
-PROJECT_SOURCES = project.v
+PROJECT_SOURCES = \
+	tt_um_poly6_synth.v \
+	synth_top.v \
+	midi_rx.v \
+	poly_note_ctrl.v \
+	vco.v \
+	adsr_vca.v \
+	vcf_svf.v \
+	i2s_tx.v
 
 ifneq ($(GATES),yes)
 
