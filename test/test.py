@@ -25,7 +25,7 @@ async def send_midi_byte(dut, byte_val, clks_per_bit=384):
 async def test_project(dut):
     dut._log.info("Start")
     # 12 MHz clock -> ~83.333 ns period
-    clock = Clock(dut.clk, 83.333, unit="ns")
+    clock = Clock(dut.clk, 84, unit="ns")
     cocotb.start_soon(clock.start())
 
     dut.ena.value = 1

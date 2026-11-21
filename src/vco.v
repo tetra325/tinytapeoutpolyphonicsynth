@@ -32,8 +32,7 @@ module vco #(
         end
     endgenerate
 
-    wire signed [OUT_W:0] saw_diff =
-        $signed({1'b0, saw_u}) - $signed({1'b0, 1'b1, {(OUT_W-1){1'b0}}});
+    wire signed [OUT_W-1:0] saw_diff = ($signed({1'b0, saw_u}) - $signed({1'b0, 1'b1, {(OUT_W-1){1'b0}}}))[OUT_W-1:0];
     wire signed [OUT_W-1:0] saw_s = saw_diff[OUT_W-1:0];
 
     // Square: half cycle negative, half cycle positive (3/4 max swing)
@@ -52,8 +51,7 @@ module vco #(
     endgenerate
 
     wire [OUT_W-2:0] tri_ramp_u = phase[PHASE_W-1] ? ~tri_half_u : tri_half_u;
-    wire signed [OUT_W:0] tri_diff =
-        $signed({2'b00, tri_ramp_u}) - $signed({2'b00, 1'b1, {(OUT_W-2){1'b0}}});
+    wire signed [OUT_W-1:0] tri_diff = ($signed({2'b00, tri_ramp_u}) - $signed({2'b00, 1'b1, {(OUT_W-2){1'b0}}}))[OUT_W-1:0];
     wire signed [OUT_W-1:0] tri_s = tri_diff[OUT_W-1:0];
 
     always @(*) begin

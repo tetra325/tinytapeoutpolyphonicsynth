@@ -114,8 +114,8 @@ module synth_top #(
         {{4{v0[DATA_W-1]}}, v0} + {{4{v1[DATA_W-1]}}, v1} + {{4{v2[DATA_W-1]}}, v2} +
         {{4{v3[DATA_W-1]}}, v3} + {{4{v4[DATA_W-1]}}, v4} + {{4{v5[DATA_W-1]}}, v5};
 
-    wire signed [DATA_W+3:0] poly_scaled = poly_sum >>> 3;
-    assign mix_out = poly_scaled[DATA_W-1:0];
+    wire signed [DATA_W-1:0] poly_scaled = poly_sum[DATA_W+3:3];
+    assign mix_out = poly_scaled;
 
     vcf_svf #(
         .DATA_W(DATA_W),
