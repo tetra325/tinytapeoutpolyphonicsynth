@@ -62,7 +62,7 @@ module midi_rx #(
                 end
 
                 S_START: begin
-                    if (clk_cnt == HALF_BIT - 1) begin
+                    if ({16'd0, clk_cnt} == (HALF_BIT - 1)) begin
                         clk_cnt <= 16'd0;
                         if (sync_1 == 1'b0) begin
                             // Valid start bit mid-point; move to bit 0
@@ -77,7 +77,7 @@ module midi_rx #(
                 end
 
                 S_DATA: begin
-                    if (clk_cnt == CLKS_PER_BIT - 1) begin
+                    if ({16'd0, clk_cnt} == (CLKS_PER_BIT - 1)) begin
                         clk_cnt <= 16'd0;
                         shift_byte[bit_idx] <= sync_1; // LSB first
                         if (bit_idx == 3'd7) begin
@@ -92,7 +92,7 @@ module midi_rx #(
                 end
 
                 S_STOP: begin
-                    if (clk_cnt == CLKS_PER_BIT - 1) begin
+                    if ({16'd0, clk_cnt} == (CLKS_PER_BIT - 1)) begin
                         clk_cnt <= 16'd0;
                         if (sync_1 == 1'b1) begin
                             rx_byte    <= shift_byte;

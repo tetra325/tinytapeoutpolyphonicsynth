@@ -24,6 +24,7 @@ module poly_note_ctrl #(
     reg [PHASE_W-1:0] inc_table  [0:VOICES-1];
 
     assign any_gate = |voice_gate;
+    wire [3:0] _unused_status_low = status[3:0];
 
     genvar idx_g;
     generate

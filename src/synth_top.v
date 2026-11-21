@@ -111,8 +111,8 @@ module synth_top #(
     wire signed [DATA_W-1:0] v5 = voice_out_bus[5*DATA_W +: DATA_W];
 
     wire signed [DATA_W+3:0] poly_sum =
-        $signed(v0) + $signed(v1) + $signed(v2) +
-        $signed(v3) + $signed(v4) + $signed(v5);
+        {{4{v0[DATA_W-1]}}, v0} + {{4{v1[DATA_W-1]}}, v1} + {{4{v2[DATA_W-1]}}, v2} +
+        {{4{v3[DATA_W-1]}}, v3} + {{4{v4[DATA_W-1]}}, v4} + {{4{v5[DATA_W-1]}}, v5};
 
     wire signed [DATA_W+3:0] poly_scaled = poly_sum >>> 3;
     assign mix_out = poly_scaled[DATA_W-1:0];

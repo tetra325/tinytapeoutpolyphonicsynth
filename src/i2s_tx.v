@@ -21,7 +21,7 @@ module i2s_tx #(
     wire [4:0] bit_idx = cnt[6:2]; // 0..31 within each half-frame
 
     // Left-align signed AUDIO_W into 16-bit word (pad lower bits with 0)
-    wire signed [15:0] audio_16_s = $signed(audio_in) <<< (16 - AUDIO_W);
+    wire signed [15:0] audio_16_s = {{(16-AUDIO_W){audio_in[AUDIO_W-1]}}, audio_in} <<< (16 - AUDIO_W);
     wire [15:0] audio_16 = audio_16_s;
 
     assign sample_tick = (cnt == 8'd255);

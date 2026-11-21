@@ -30,7 +30,7 @@ module vcf_svf #(
 
     // High-pass / input error term: in - low - damping*band
     wire signed [ACC_W-1:0] damp_term = band >>> res_shift;
-    wire signed [ACC_W+1:0] hp_wide   = $signed(in_ext) - $signed(low) - $signed(damp_term);
+    wire signed [ACC_W+1:0] hp_wide   = {{2{in_ext[ACC_W-1]}}, in_ext} - {{2{low[ACC_W-1]}}, low} - {{2{damp_term[ACC_W-1]}}, damp_term};
 
     wire signed [ACC_W-1:0] hp_sat =
         (hp_wide > $signed({{2{1'b0}}, ACC_MAX})) ? ACC_MAX :
@@ -38,7 +38,7 @@ module vcf_svf #(
         hp_wide[ACC_W-1:0];
 
     wire signed [ACC_W-1:0] f_band_step = hp_sat >>> cutoff_shift;
-    wire signed [ACC_W+1:0] band_next_w = $signed(band) + $signed(f_band_step);
+    wire signed [ACC_W+1:0] band_next_w = {{2{band[ACC_W-1]}}, band} + {{2{f_band_step[ACC_W-1]}}, f_band_step};
 
     wire signed [ACC_W-1:0] band_next =
         (band_next_w > $signed({{2{1'b0}}, ACC_MAX})) ? ACC_MAX :
@@ -46,7 +46,7 @@ module vcf_svf #(
         band_next_w[ACC_W-1:0];
 
     wire signed [ACC_W-1:0] f_low_step  = band_next >>> cutoff_shift;
-    wire signed [ACC_W+1:0] low_next_w  = $signed(low) + $signed(f_low_step);
+    wire signed [ACC_W+1:0] low_next_w  = {{2{low[ACC_W-1]}}, low} + {{2{f_low_step[ACC_W-1]}}, f_low_step};
 
     wire signed [ACC_W-1:0] low_next =
         (low_next_w > $signed({{2{1'b0}}, ACC_MAX})) ? ACC_MAX :
