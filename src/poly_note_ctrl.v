@@ -90,7 +90,7 @@ module poly_note_ctrl #(
         end
     endfunction
 
-    integer i;
+    integer alloc_i;
     reg [2:0]  alloc_idx;
     reg        found_match;
     reg        found_free;
@@ -103,18 +103,18 @@ module poly_note_ctrl #(
         min_env     = 16'hFFFF;
 
         // 1. Reuse voice already playing this note
-        for (i = 0; i < VOICES; i = i + 1) begin
-            if (!found_match && voice_gate[i] && (note_table[i] == data1)) begin
-                alloc_idx   = i[2:0];
+        for (alloc_i = 0; alloc_i < VOICES; alloc_i = alloc_i + 1) begin
+            if (!found_match && voice_gate[alloc_i] && (note_table[alloc_i] == data1)) begin
+                alloc_idx   = alloc_i[2:0];
                 found_match = 1'b1;
             end
         end
 
         // 2. Otherwise pick first ungated voice
         if (!found_match) begin
-            for (i = 0; i < VOICES; i = i + 1) begin
-                if (!found_free && !voice_gate[i]) begin
-                    alloc_idx  = i[2:0];
+            for (alloc_i = 0; alloc_i < VOICES; alloc_i = alloc_i + 1) begin
+                if (!found_free && !voice_gate[alloc_i]) begin
+                    alloc_idx  = alloc_i[2:0];
                     found_free = 1'b1;
                 end
             end
@@ -122,14 +122,16 @@ module poly_note_ctrl #(
 
         // 3. Otherwise steal voice with lowest current envelope
         if (!found_match && !found_free) begin
-            for (i = 0; i < VOICES; i = i + 1) begin
-                if (env_bus[i*16 +: 16] < min_env) begin
-                    min_env   = env_bus[i*16 +: 16];
-                    alloc_idx = i[2:0];
+            for (alloc_i = 0; alloc_i < VOICES; alloc_i = alloc_i + 1) begin
+                if (env_bus[alloc_i*16 +: 16] < min_env) begin
+                    min_env   = env_bus[alloc_i*16 +: 16];
+                    alloc_idx = alloc_i[2:0];
                 end
             end
         end
     end
+
+    integer rst_i;
 
     always @(posedge clk) begin
         if (!rst_n) begin
@@ -137,9 +139,9 @@ module poly_note_ctrl #(
             data1      <= 7'd0;
             have_data1 <= 1'b0;
             voice_gate <= {VOICES{1'b0}};
-            for (i = 0; i < VOICES; i = i + 1) begin
-                note_table[i] <= 7'd69;
-                inc_table[i]  <= 20'd9842;
+            for (rst_i = 0; rst_i < VOICES; rst_i = rst_i + 1) begin
+                note_table[rst_i] <= 7'd69;
+                inc_table[rst_i]  <= 20'd9842;
             end
         end else if (byte_valid) begin
             if (rx_byte[7]) begin
