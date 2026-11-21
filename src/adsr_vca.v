@@ -116,8 +116,8 @@ module adsr_vca #(
     wire signed [AUDIO_W:0] s4 = env[12] ? ({{1{audio_in[AUDIO_W-1]}}, audio_in} >>> 4) : {(AUDIO_W+1){1'b0}};
     wire signed [AUDIO_W:0] s5 = env[11] ? ({{1{audio_in[AUDIO_W-1]}}, audio_in} >>> 5) : {(AUDIO_W+1){1'b0}};
     wire signed [AUDIO_W:0] s6 = env[10] ? ({{1{audio_in[AUDIO_W-1]}}, audio_in} >>> 6) : {(AUDIO_W+1){1'b0}};
-    wire signed [AUDIO_W:0] s7 = env[9]  ? (audio_in >>> 7) : {(AUDIO_W+1){1'b0}};
-    wire signed [AUDIO_W:0] s8 = env[8]  ? (audio_in >>> 8) : {(AUDIO_W+1){1'b0}};
+    wire signed [AUDIO_W:0] s7 = env[9]  ? ({{1{audio_in[AUDIO_W-1]}}, audio_in} >>> 7) : {(AUDIO_W+1){1'b0}};
+    wire signed [AUDIO_W:0] s8 = env[8]  ? ({{1{audio_in[AUDIO_W-1]}}, audio_in} >>> 8) : {(AUDIO_W+1){1'b0}};
 
     wire signed [AUDIO_W+3:0] vca_sum = {{3{s1[AUDIO_W]}}, s1} + {{3{s2[AUDIO_W]}}, s2} + {{3{s3[AUDIO_W]}}, s3} + {{3{s4[AUDIO_W]}}, s4} + {{3{s5[AUDIO_W]}}, s5} + {{3{s6[AUDIO_W]}}, s6} + {{3{s7[AUDIO_W]}}, s7} + {{3{s8[AUDIO_W]}}, s8};
 
