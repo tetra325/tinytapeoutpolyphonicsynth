@@ -132,6 +132,7 @@ module poly_note_ctrl #(
     end
 
     integer rst_i;
+    integer note_off_i;
 
     always @(posedge clk) begin
         if (!rst_n) begin
@@ -166,9 +167,9 @@ module poly_note_ctrl #(
                     end
                     // Note Off (0x8n or 0x9n with velocity == 0)
                     else if (status[7:4] == 4'h8 || (status[7:4] == 4'h9 && rx_byte[6:0] == 7'd0)) begin
-                        for (i = 0; i < VOICES; i = i + 1) begin
-                            if (note_table[i] == data1) begin
-                                voice_gate[i] <= 1'b0;
+                        for (note_off_i = 0; note_off_i < VOICES; note_off_i = note_off_i + 1) begin
+                            if (note_table[note_off_i] == data1) begin
+                                voice_gate[note_off_i] <= 1'b0;
                             end
                         end
                     end
